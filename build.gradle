@@ -10,16 +10,13 @@ plugins {
 	id 'groovy'
 	id 'idea'
 	id 'eclipse'
-	id 'org.springframework.boot'     version '1.5.2.RELEASE'
-	id "org.flywaydb.flyway"          version "4.0.3"
-	id 'io.franzbecker.gradle-lombok' version '1.8'
+	id 'org.springframework.boot'           version '1.5.2.RELEASE'
+	id 'org.flywaydb.flyway'                version '4.0.3'
+	id 'com.commercehub.gradle.plugin.avro' version '0.9.0'
 }
 
 /* _____ base config _____ */
 apply from: 'config-base.gradle'
-
-/* _____ querydsl config _____ */
-apply from: 'config-querydsl.gradle'
 
 /* _____ dependencies config _____ */
 apply from: 'dependencies.gradle'
@@ -28,6 +25,13 @@ jar {
 	baseName = 'shbank-msg-exchange-gateway'
 	version = APP_VERSION
 }
+
+task generateAvro(type: com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask) {
+	source("${sourceSets.main}/avro")
+	outputDir = file("/avro22/out")
+}
+
+compileJava.source(generateAvro.outputs)
 
 /* _____ build task :: parkstore-app-server _____ */
 task buildApp(type: Copy) {

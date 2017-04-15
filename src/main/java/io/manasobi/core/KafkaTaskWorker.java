@@ -1,6 +1,5 @@
 package io.manasobi.core;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.manasobi.config.KafkaConfig;
 import io.manasobi.domain.Point;
@@ -18,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public class KafkaTaskWorker implements Runnable {
 
-    private KafkaTemplate<String, JsonNode> kafkaTemplate;
+    private KafkaTemplate<String, Point> kafkaTemplate;
 
     private int index;
 
@@ -37,7 +36,7 @@ public class KafkaTaskWorker implements Runnable {
         ObjectMapper objectMapper = new ObjectMapper();
 
         messageList.forEach(msg -> {
-            kafkaTemplate.send(KafkaConfig.TOPIC, generateKey(), objectMapper.convertValue(msg, JsonNode.class));
+            kafkaTemplate.send(KafkaConfig.TOPIC, generateKey(), msg);
         });
 
         log.debug("Dataset 레코드 총계: {}", NumberFormat.getNumberInstance().format(messageList.size()));

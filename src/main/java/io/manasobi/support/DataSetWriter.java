@@ -94,7 +94,7 @@ public class DataSetWriter {
     public static void main(String[] args) {
 
         DataSetWriter dataSetWriter = new DataSetWriter();
-        dataSetWriter.write(Size._100_000.getSize());
+        dataSetWriter.write(Size._1_000_000.getSize());
     }
 
 }

@@ -2,6 +2,7 @@ package io.manasobi.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.manasobi.core.RoundRobinPartitioner;
+import io.manasobi.domain.AvroSerializer;
 import io.manasobi.domain.Point;
 import io.manasobi.domain.PointSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -33,7 +34,7 @@ public class KafkaProducerConfig {
     private MessageSource messageSource;
 
     @Bean
-    public ProducerFactory<String, JsonNode> producerFactory() {
+    public ProducerFactory<String, Point> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
@@ -50,14 +51,14 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, AvroSerializer.class);
         props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RoundRobinPartitioner.class);
 
         return props;
     }
 
     @Bean
-    public KafkaTemplate<String, JsonNode> kafkaTemplate() {
+    public KafkaTemplate<String, Point> kafkaTemplate() {
         return new KafkaTemplate(producerFactory());
     }
 }

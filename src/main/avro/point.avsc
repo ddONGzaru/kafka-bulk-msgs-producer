@@ -1,0 +1,18 @@
+{"namespace": "io.manasobi",
+  "type": "record",
+  "name": "Point",
+  "fields": [
+    {"name": "timestamp",  "type": "long"},
+
+    {"name": "tagId",     "type": "string"},
+    {"name": "tagName",   "type": "string"},
+    {"name": "type",       "type": "string"},
+    {"name": "value",      "type": "string"},
+    {"name": "siteId",    "type": "string"},
+    {"name": "opcId",     "type": "string"},
+    {"name": "groupName", "type": "string"},
+
+    {"name": "quality",    "type": "int"},
+    {"name": "errorCode", "type": "int"}
+  ]
+}
