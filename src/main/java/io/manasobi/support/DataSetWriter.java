@@ -40,8 +40,8 @@ public class DataSetWriter {
         while(size != page * unitSize) {
 
             List<Point> listUnit = pointList.stream()
-                                            .skip(page * size)
-                                            .limit(size)
+                                            .skip(page * unitSize)
+                                            .limit(unitSize)
                                             .collect(Collectors.toCollection(ArrayList::new));
 
             resultList.add(listUnit);

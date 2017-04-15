@@ -16,5 +16,4 @@ public class KafkaConfig {
 
     public static int MSG_TOTAL_SIZE;
 
-    public static int MSG_MAX_ROWS = 5000;
 }
