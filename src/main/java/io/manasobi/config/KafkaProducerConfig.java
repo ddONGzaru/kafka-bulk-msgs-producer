@@ -33,7 +33,7 @@ public class KafkaProducerConfig {
     private MessageSource messageSource;
 
     @Bean
-    public ProducerFactory<String, Point> producerFactory() {
+    public ProducerFactory<String, JsonNode> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
@@ -50,14 +50,14 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, PointSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RoundRobinPartitioner.class);
 
         return props;
     }
 
     @Bean
-    public KafkaTemplate<String, Point> kafkaTemplate() {
+    public KafkaTemplate<String, JsonNode> kafkaTemplate() {
         return new KafkaTemplate(producerFactory());
     }
 }

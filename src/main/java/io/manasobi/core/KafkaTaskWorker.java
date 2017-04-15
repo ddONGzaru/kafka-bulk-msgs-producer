@@ -1,21 +1,15 @@
 package io.manasobi.core;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 import io.manasobi.config.KafkaConfig;
 import io.manasobi.domain.Point;
 import io.manasobi.utils.AppContextManager;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.kafka.core.KafkaTemplate;
 
 import java.text.NumberFormat;
 import java.util.List;
-import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -24,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public class KafkaTaskWorker implements Runnable {
 
-    private KafkaTemplate<String, Point> kafkaTemplate;
+    private KafkaTemplate<String, JsonNode> kafkaTemplate;
 
     private int index;
 
@@ -43,7 +37,7 @@ public class KafkaTaskWorker implements Runnable {
         ObjectMapper objectMapper = new ObjectMapper();
 
         messageList.forEach(msg -> {
-            kafkaTemplate.send(KafkaConfig.TOPIC, generateKey(), msg);
+            kafkaTemplate.send(KafkaConfig.TOPIC, generateKey(), objectMapper.convertValue(msg, JsonNode.class));
         });
 
         log.debug("Dataset 레코드 총계: {}", NumberFormat.getNumberInstance().format(messageList.size()));
