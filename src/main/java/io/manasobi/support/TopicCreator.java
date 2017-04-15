@@ -14,7 +14,7 @@ import java.util.Properties;
 public class TopicCreator {
 
     private static final String ZK_SERVER = "192.168.0.100:2181";
-    private static final String TOPIC_NAME = "bulk.msg.test.0002";
+    private static final String TOPIC_NAME = "bulk.msg.test.002";
 
     private static final int NUM_PARTITIONS = 3;
     private static final int REPLICATION_FACTOR = 3;
