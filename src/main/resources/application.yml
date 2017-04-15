@@ -1,0 +1,32 @@
+#debug: true
+
+#active profiles :: [dev|prod|stage|test]
+spring:
+  profiles:
+    active: dev
+  jmx:
+    enabled: false
+
+javafx:
+  title: Kafka Bulk Message Publisher ver.1.0.0
+  stage:
+    resizable: false
+
+#dataset
+dataset.dir: "2015-10-30"
+
+#kafka
+kafka:
+  metadata.broker.list: 192.168.0.100:32768,192.168.0.100:32769,192.168.0.100:32770
+  zookeeper:
+    url: 192.168.0.100:2181
+    session.timeout.ms: 4000
+    sync.timeout.ms: 200
+  auto.commit.interval.ms: 1000
+  group.id: anypoint.tv.group
+  topic:
+      log.collector: log.collector.test.0000
+      log.collector.thread.nums: 10
+
+#logging
+logging.config: classpath:logback.xml

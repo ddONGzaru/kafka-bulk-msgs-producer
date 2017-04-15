@@ -1,0 +1,73 @@
+/*
+ ##################################################
+ #
+ # [ parkstore-app-server ] Gradle Project Config
+ #
+ ##################################################
+ */
+
+
+/* _____ static code analysis plugin _____ */
+apply plugin: 'jacoco'
+apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+apply plugin: 'jdepend'
+
+
+/* _____ test config _____ */
+test {
+    jacoco{
+        excludes = ['**/entity/**']
+        //includes = ['com/bla/**']
+        append = false
+    }
+}
+
+jacoco{
+    toolVersion = "0.7.6.201602180812"
+    //toolVersion = "0.7.5.201505241946"
+}
+
+findbugs {
+    ignoreFailures = true
+}
+
+checkstyle {
+    configFile = new File(rootDir, 'src/test/resources/static/analysis/checkstyle-config.xml')
+    ignoreFailures = true
+}
+
+checkstyleMain.exclude '**/utils/**'
+
+jdepend {
+    sourceSets = [sourceSets.main]
+    ignoreFailures = true
+}
+
+pmd {
+    ruleSetFiles = files("$rootDir/src/test/resources/static/analysis/pmd-rulesets.xml")
+    ignoreFailures = true
+}
+
+pmdMain {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+test {
+    maxHeapSize = "1024m"
+
+    //easypay 관련 테스트는 가끔씩 카드사 전화요망이라는 에러 메시지와 함께 에러를 발생시킴.
+    //기 테스트로 정상 동작 여부는 확인되었으므로 젠킨스 테스트때는 제외 시키는 것으로 함.
+    exclude '**/EasyPayCertIntegrationTest.class'
+    exclude '**/EasyPayIntegrationTest.class'
+    exclude '**/EasyPayReservationIntegrationTest.class'
+
+    //exclude '**/integration/**'
+
+    // java 8 버전부터 지원하지 않는 옵션임.
+    //jvmArgs "-XX:MaxPermSize=256m"
+}

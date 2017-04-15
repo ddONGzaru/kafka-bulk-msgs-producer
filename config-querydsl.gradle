@@ -1,0 +1,53 @@
+/*
+ ##################################################
+ #
+ # [ parkstore-app-server ] Gradle Project Config
+ #
+ ##################################################
+ */
+
+/*
+    _____ configuration config _____
+ */
+configurations {
+    querydslapt
+}
+
+/*
+    _____ sourceSets config _____
+ */
+sourceSets {
+    querydsl.java.srcDirs = ['src/main/querydsl']
+}
+
+/*
+    _____ QueryDSL config _____
+ */
+task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
+    source = sourceSets.main.java
+    classpath = configurations.compile + configurations.querydslapt
+
+    options.compilerArgs = [
+            '-proc:only',
+            '-processor', 'com.querydsl.apt.jpa.JPAAnnotationProcessor'
+    ]
+    destinationDir = sourceSets.querydsl.java.srcDirs.iterator().next()
+
+    //dependencyCacheDir = compileJava.dependencyCacheDir
+}
+
+idea {
+    module {
+        sourceDirs += file('src/main/querydsl')
+    }
+}
+
+compileJava {
+    dependsOn generateQueryDSL
+    source generateQueryDSL.destinationDir
+}
+
+clean {
+    delete sourceSets.querydsl.java.srcDirs
+}
+

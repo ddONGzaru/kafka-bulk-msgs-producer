@@ -1,0 +1,117 @@
+buildscript {
+	ext {
+		//springBootVersion = '1.4.3.RELEASE'
+		APP_VERSION = JAR_VERSION
+	}
+}
+
+plugins {
+	id 'java'
+	id 'groovy'
+	id 'idea'
+	id 'eclipse'
+	id 'org.springframework.boot'     version '1.5.2.RELEASE'
+	id "org.flywaydb.flyway"          version "4.0.3"
+	id 'io.franzbecker.gradle-lombok' version '1.8'
+}
+
+/* _____ base config _____ */
+apply from: 'config-base.gradle'
+
+/* _____ querydsl config _____ */
+apply from: 'config-querydsl.gradle'
+
+/* _____ dependencies config _____ */
+apply from: 'dependencies.gradle'
+
+jar {
+	baseName = 'shbank-msg-exchange-gateway'
+	version = APP_VERSION
+}
+
+/* _____ build task :: parkstore-app-server _____ */
+task buildApp(type: Copy) {
+
+	def appYmlPath = "${sourceSets.main.output.classesDir}/application.yml"
+
+	from appYmlPath
+	into 'build/libs'
+
+	def logbackPath = "${sourceSets.main.output.classesDir}/logback-prod.xml"
+
+	from logbackPath
+	into 'build/libs'
+
+	/*rename { fileName ->
+		if (fileName == 'logback-prod.xml') {
+			fileName = 'shbank-msg-exchange-gateway-' + fileName
+			fileName.replace('-prod', '')
+		}
+	}*/
+
+	rename 'logback-prod.xml', 'logback.xml'
+
+	dependsOn bootRepackage
+}
+
+task buildAppOnline(type: Copy) {
+
+	def appName = jar.baseName + "-online-"+ jar.version +".jar"
+	def appYmlPath = "${sourceSets.main.output.classesDir}/application.yml"
+	def logbackPath = "${sourceSets.main.output.classesDir}/logback-prod.xml"
+
+	from appYmlPath
+	into 'build/libs'
+
+	from logbackPath
+	into 'build/libs'
+
+	from 'build/libs'
+	into 'build/libs'
+
+	rename 'logback-prod.xml', 'logback.xml'
+	rename jar.archiveName, appName
+
+	dependsOn bootRepackage
+}
+
+task buildAppBatch(type: Copy) {
+
+	def appName = jar.baseName + "-batch-"+ jar.version +".jar"
+	def appYmlPath = "${sourceSets.main.output.classesDir}/application.yml"
+	def logbackPath = "${sourceSets.main.output.classesDir}/logback-prod.xml"
+
+	from appYmlPath
+	into 'build/libs'
+
+	from logbackPath
+	into 'build/libs'
+
+	from 'build/libs'
+	into 'build/libs'
+
+	rename 'logback-prod.xml', 'logback.xml'
+	rename jar.archiveName, appName
+
+	dependsOn bootRepackage
+}
+
+/* _____ config :: flyway for local test _____ */
+flyway {
+	url = 'jdbc:mariadb://localhost:3306/sh-atms'
+	user = 'root'
+	password = 'ParkSt0re!'
+	locations = ["filesystem:${projectDir}/src/test/resources/db/migration"]
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '3.1'
+}
+
+/*
+processResources {
+	filesMatching("**//*
+src/main/resources/application.yml") {
+		expand( project.properties )
+	}
+}*/

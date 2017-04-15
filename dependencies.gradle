@@ -1,0 +1,52 @@
+/*
+ ##################################################
+ #
+ # [ parkstore-app-server ] gradle project config
+ #
+ ##################################################
+ */
+
+dependencies {
+
+    //___ compile ___
+
+    // spring boot
+    compile 'org.springframework.boot:spring-boot-starter'
+
+    // javafx
+    compile 'de.roskenet:springboot-javafx-support:1.3.17'
+
+    // kafka
+    compile 'org.apache.kafka:kafka_2.11:0.10.1.0'
+    compile 'org.apache.kafka:kafka-clients:0.10.1.0'
+    compile 'com.101tec:zkclient:0.10'
+    compile 'org.springframework.kafka:spring-kafka:1.2.0.RELEASE'
+
+    //etc
+    compile 'com.esotericsoftware:kryo:4.0.0'
+    compile 'com.google.guava:guava:17.0'
+    //compile 'joda-time:joda-time:2.3'
+    compile 'org.apache.commons:commons-lang3:3.5'
+    compile 'commons-io:commons-io:2.4'
+
+    compile group: 'org.apache.kafka', name: 'connect-json', version: '0.10.1.0'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.8.8'
+
+
+    //___ compileOnly ___
+    compileOnly 'org.projectlombok:lombok'
+
+
+    //___ testCompile ___
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.dbunit:dbunit:2.5.3'
+    testCompile 'io.dat:onsemiro-core:1.0.29'
+
+
+    //___ runtime ___
+    //runtime 'org.springframework.boot:spring-boot-devtools'
+
+}
+
+
+
